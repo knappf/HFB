@@ -12,7 +12,7 @@
 !       type(phonon_type), allocatable, save :: list_phon(:)
        double precision, allocatable, save :: TDA_matrix(:,:),w(:)
        double precision, allocatable, save :: spur_CM(:)
-       double precision, allocatable, save :: sixj1(:,:,:,:,:,:)
+!       double precision, allocatable, save :: sixj1(:,:,:,:,:,:)
        integer, allocatable, save :: ityp1(:),ityp2(:)
        integer :: p1,h1,tz1,p2,h2,tz2
 
@@ -99,87 +99,6 @@
         enddo
        enddo
 
-       allocate(VNNtz(idtz,idtz,idtz,idtz,0:jmax))
-       VNNtz=0.d0
-
-       do i=1,idtz
-        do j=1,idtz
-         do k=1,idtz
-          do l=1,idtz
-           do Jp=0,jmax
-
-            if(levtz(i)%tz.eq.-1.and.levtz(j)%tz.eq.-1) then
-             if(levtz(k)%tz.eq.-1.and.levtz(l)%tz.eq.-1) then
-              VNNtz(i,j,k,l,Jp)=Vpp(levtz(i)%point,levtz(j)%point,
-     &                            levtz(k)%point,levtz(l)%point,Jp)
-             endif
-            endif
-
-            if(levtz(i)%tz.eq.1.and.levtz(j)%tz.eq.1) then
-             if(levtz(k)%tz.eq.1.and.levtz(l)%tz.eq.1) then
-              VNNtz(i,j,k,l,Jp)=Vnn(levtz(i)%point,levtz(j)%point,
-     &                            levtz(k)%point,levtz(l)%point,Jp)
-             endif
-            endif
-
-            if(levtz(i)%tz.eq.-1.and.levtz(j)%tz.eq.1) then
-             if(levtz(k)%tz.eq.-1.and.levtz(l)%tz.eq.1) then
-              VNNtz(i,j,k,l,Jp)=Vpn(levtz(i)%point,levtz(j)%point,
-     &                            levtz(k)%point,levtz(l)%point,Jp)
-             endif
-            endif
-            if(levtz(i)%tz.eq.1.and.levtz(j)%tz.eq.-1) then
-             if(levtz(k)%tz.eq.1.and.levtz(l)%tz.eq.-1) then
-              VNNtz(i,j,k,l,Jp)=Vpn(levtz(j)%point,levtz(i)%point,
-     &                            levtz(l)%point,levtz(k)%point,Jp)
-     &        *dble((-1)**((levtz(i)%j2+levtz(j)%j2+levtz(k)%j2+
-     &                                             levtz(l)%j2)/2))
-             endif
-            endif
-            if(levtz(i)%tz.eq.-1.and.levtz(j)%tz.eq.1) then
-             if(levtz(k)%tz.eq.1.and.levtz(l)%tz.eq.-1) then
-              VNNtz(i,j,k,l,Jp)=-Vpn(levtz(i)%point,levtz(j)%point,
-     &                            levtz(l)%point,levtz(k)%point,Jp)
-     &        *dble((-1)**(Jp+(levtz(k)%j2+levtz(l)%j2)/2))
-             endif
-            endif
-            if(levtz(i)%tz.eq.1.and.levtz(j)%tz.eq.-1) then
-             if(levtz(k)%tz.eq.-1.and.levtz(l)%tz.eq.1) then
-              VNNtz(i,j,k,l,Jp)=-Vpn(levtz(j)%point,levtz(i)%point,
-     &                            levtz(k)%point,levtz(l)%point,Jp)
-     &        *dble((-1)**(Jp+(levtz(i)%j2+levtz(j)%j2)/2))
-             endif
-            endif
-
-           enddo
-          enddo
-         enddo
-        enddo
-       enddo
-
-       allocate(FNNtz(idtz,idtz,idtz,idtz,0:jmax))
-       allocate(VNLtz(idtz,id,idtz,id,0:jmax))
-       FNNtz=0.d0
-       VNLtz=0.d0
-       do i=1,idtz
-        do j=1,idtz
-         do k=1,idtz
-          do l=1,idtz
-           do Jp=0,jmax
-            val=0.d0
-            do Jpp=0,jmax
-             phase=(-1)**((levtz(j)%j2+levtz(k)%j2)/2-Jp-Jpp)
-             tri=dble(2*Jpp+1)*sixj1(levtz(i)%j2,levtz(j)%j2,Jp,
-     &            levtz(l)%j2,levtz(k)%j2,Jpp)
-             val=val+phase*tri*VNNtz(i,k,j,l,Jpp)
-            enddo
-            FNNtz(i,j,k,l,Jp)=val
-           enddo
-          enddo
-         enddo
-        enddo
-       enddo
-
        open(10,file='VNNtz.out',form='formatted',status='unknown')
        do i=1,idtz
         do j=1,idtz
@@ -211,27 +130,6 @@
         enddo
        enddo
        close(10)
-
-       deallocate(VNNtz)
-
-       do i=1,idtz
-        do j=1,id
-         do k=1,idtz
-          do l=1,id
-           do Jp=0,jmax
-            if(levtz(i)%tz.eq.-1.and.levtz(k)%tz.eq.-1) then
-             VNLtz(i,j,k,l,Jp)=VpY(levtz(i)%point,j,
-     &                                       levtz(k)%point,l,Jp)
-            endif
-            if(levtz(i)%tz.eq.1.and.levtz(k)%tz.eq.1) then
-             VNLtz(i,j,k,l,Jp)=VnY(levtz(i)%point,j,
-     &                                       levtz(k)%point,l,Jp)
-            endif
-           enddo
-          enddo
-         enddo
-        enddo
-       enddo
 
        open(10,file='VNLtz.out',form='formatted',status='unknown')
        do i=1,idtz

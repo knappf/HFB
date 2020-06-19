@@ -5,10 +5,10 @@ LDOPTS = -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
 #LDOPTS = -L$MKLPATH -I$MKLINCLUDE -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
 
 EXENAME = HF_run
-OBJS =HFB.o read_input.o dimm.o deallocate_all.o initialize_basis.o occupations.o kinetic.o interaction.o transition.o hfb_iteration.o transf_interaction.o HFB_energy.o hp_field.o hn_field.o Dp_field.o Dn_field.o hY_field.o diagonalization.o make_sp_levels.o make_densities.o check_densities.o R_val.o gauss_int.o order.o TDA.o NYTDA.o pnTDAhh.o pnTDAhp.o pnTDAph.o pnTDApp.o ppTDApp.o nnTDApp.o TDAtz.o TDAtzpp.o interaction_NY.o make_qsp_levels.o MBPT_energy.o transit_calc.o transit_calc_spur.o phonon_density_calc.o diag_subspace.o spur_vec.o spur_vectz.o geom.o technical.o math.o geometric.o 
+OBJS =HFB.o read_input.o dimm.o deallocate_all.o initialize_basis.o occupations.o kinetic.o interaction.o transition.o hfb_iteration.o transf_interaction.o HFB_energy.o hp_field.o hn_field.o Dp_field.o Dn_field.o hY_field.o diagonalization.o make_sp_levels.o make_densities.o check_densities.o R_val.o gauss_int.o order.o TDA.o NYTDA.o pnTDAhh.o pnTDAhp.o pnTDAph.o pnTDApp.o ppTDApp.o nnTDApp.o VNLtz.o FNNtz.o VNNtz.o TDAtz.o TDAtzpp.o interaction_NY.o make_qsp_levels.o MBPT_energy.o transit_calc.o transit_calc_spur.o phonon_density_calc.o diag_subspace.o spur_vec.o spur_vectz.o geom.o technical.o math.o geometric.o 
 
 $(EXENAME): $(OBJS)
-	$(LD) $(LDOPTS) -o ../$(EXENAME) $(OBJS)
+	$(LD) $(LDOPTS) -o $(EXENAME) $(OBJS)
 
 HFB.o: HFB.f technical.o math.o
 	$(FC) $(FCOPTS) -c HFB.f
@@ -106,7 +106,16 @@ ppTDApp.o: ppTDApp.f math.o technical.o geom.o
 nnTDApp.o: nnTDApp.f math.o technical.o geom.o
 	$(FC) $(FCOPTS) -c nnTDApp.f
 
-TDAtz.o: TDAtz.f math.o technical.o geom.o
+VNLtz.o: VNLtz.f technical.o
+	$(FC) $(FCOPTS) -c VNLtz.f
+
+FNNtz.o: FNNtz.f technical.o
+	$(FC) $(FCOPTS) -c FNNtz.f
+
+VNNtz.o: VNNtz.f technical.o
+	$(FC) $(FCOPTS) -c VNNtz.f
+
+TDAtz.o: TDAtz.f VNLtz.o FNNtz.o VNNtz.o math.o technical.o geom.o
 	$(FC) $(FCOPTS) -c TDAtz.f
 
 TDAtzpp.o: TDAtzpp.f math.o technical.o geom.o
@@ -155,7 +164,7 @@ geometric.o: geometric.f90
 #	$(FC) $(FCOPTS) -c $<
 
 clean:
-	rm -f *.o *.mod ../$(EXENAME)
+	rm -f *.o *.mod $(EXENAME)
 
 #clobber:
 #	rm -f $(EXENAME)

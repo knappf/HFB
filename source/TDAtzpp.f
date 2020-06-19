@@ -12,7 +12,7 @@
 !       type(phonon_type), allocatable, save :: list_phon(:)
        double precision, allocatable, save :: TDA_matrix(:,:),w(:)
        double precision, allocatable, save :: spur_CM(:)
-       double precision, allocatable, save :: sixj1(:,:,:,:,:,:)
+!       double precision, allocatable, save :: sixj1(:,:,:,:,:,:)
        integer, allocatable, save :: ityp1(:),ityp2(:)
        integer :: p1,h1,tz1,p2,h2,tz2
 
@@ -99,87 +99,6 @@
 !        enddo
 !       enddo
 
-       allocate(VNNtz(idtz,idtz,idtz,idtz,0:jmax))
-       VNNtz=0.d0
-
-       do i=1,idtz
-        do j=1,idtz
-         do k=1,idtz
-          do l=1,idtz
-           do Jp=0,jmax
-
-            if(levtz(i)%tz.eq.-1.and.levtz(j)%tz.eq.-1) then
-             if(levtz(k)%tz.eq.-1.and.levtz(l)%tz.eq.-1) then
-              VNNtz(i,j,k,l,Jp)=Vpp(levtz(i)%point,levtz(j)%point,
-     &                            levtz(k)%point,levtz(l)%point,Jp)
-             endif
-            endif
-
-            if(levtz(i)%tz.eq.1.and.levtz(j)%tz.eq.1) then
-             if(levtz(k)%tz.eq.1.and.levtz(l)%tz.eq.1) then
-              VNNtz(i,j,k,l,Jp)=Vnn(levtz(i)%point,levtz(j)%point,
-     &                            levtz(k)%point,levtz(l)%point,Jp)
-             endif
-            endif
-
-            if(levtz(i)%tz.eq.-1.and.levtz(j)%tz.eq.1) then
-             if(levtz(k)%tz.eq.-1.and.levtz(l)%tz.eq.1) then
-              VNNtz(i,j,k,l,Jp)=Vpn(levtz(i)%point,levtz(j)%point,
-     &                            levtz(k)%point,levtz(l)%point,Jp)
-             endif
-            endif
-            if(levtz(i)%tz.eq.1.and.levtz(j)%tz.eq.-1) then
-             if(levtz(k)%tz.eq.1.and.levtz(l)%tz.eq.-1) then
-              VNNtz(i,j,k,l,Jp)=Vpn(levtz(j)%point,levtz(i)%point,
-     &                            levtz(l)%point,levtz(k)%point,Jp)
-     &        *dble((-1)**((levtz(i)%j2+levtz(j)%j2+levtz(k)%j2+
-     &                                             levtz(l)%j2)/2))
-             endif
-            endif
-            if(levtz(i)%tz.eq.-1.and.levtz(j)%tz.eq.1) then
-             if(levtz(k)%tz.eq.1.and.levtz(l)%tz.eq.-1) then
-              VNNtz(i,j,k,l,Jp)=-Vpn(levtz(i)%point,levtz(j)%point,
-     &                            levtz(l)%point,levtz(k)%point,Jp)
-     &        *dble((-1)**(Jp+(levtz(k)%j2+levtz(l)%j2)/2))
-             endif
-            endif
-            if(levtz(i)%tz.eq.1.and.levtz(j)%tz.eq.-1) then
-             if(levtz(k)%tz.eq.-1.and.levtz(l)%tz.eq.1) then
-              VNNtz(i,j,k,l,Jp)=-Vpn(levtz(j)%point,levtz(i)%point,
-     &                            levtz(k)%point,levtz(l)%point,Jp)
-     &        *dble((-1)**(Jp+(levtz(i)%j2+levtz(j)%j2)/2))
-             endif
-            endif
-
-           enddo
-          enddo
-         enddo
-        enddo
-       enddo
-
-!       allocate(FNNtz(idtz,idtz,idtz,idtz,0:jmax))
-!       allocate(VNLtz(idtz,id,idtz,id,0:jmax))
-!       FNNtz=0.d0
-!       VNLtz=0.d0
-!       do i=1,idtz
-!        do j=1,idtz
-!         do k=1,idtz
-!          do l=1,idtz
-!           do Jp=0,jmax
-!            val=0.d0
-!            do Jpp=0,jmax
-!             phase=(-1)**((levtz(j)%j2+levtz(k)%j2)/2-Jp-Jpp)
-!             tri=dble(2*Jpp+1)*sixj1(levtz(i)%j2,levtz(j)%j2,Jp,
-!     &            levtz(l)%j2,levtz(k)%j2,Jpp)
-!             val=val+phase*tri*VNNtz(i,k,j,l,Jpp)
-!            enddo
-!            FNNtz(i,j,k,l,Jp)=val
-!           enddo
-!          enddo
-!         enddo
-!        enddo
-!       enddo
-
        open(10,file='VNNtzpp.out',form='formatted',status='unknown')
        do i=1,idtz
         do j=1,idtz
@@ -195,22 +114,6 @@
         enddo
        enddo
        close(10)
-
-!       open(10,file='FNNtzpp.out',form='formatted',status='unknown')
-!       do i=1,idtz
-!        do j=1,idtz
-!         do k=1,idtz
-!          do l=1,idtz
-!           do Jp=0,jmax
-!            if(dabs(FNNtz(i,j,k,l,Jp)).gt.1.d-7)then
-!             write(10,*) i,j,k,l,Jp,FNNtz(i,j,k,l,Jp)
-!            endif
-!           enddo
-!          enddo
-!         enddo
-!        enddo
-!       enddo
-!       close(10)
 
        open(1,file='TDAtz_enerpp.out',status='unknown',form='formatted')
         write(1,*)
@@ -305,10 +208,10 @@
          enddo
         endif
 
-        if(ipar.eq.-1.and.Jp.eq.1) then
-         write(5) i1
-         write(5) TDA_matrix
-        endif
+!        if(ipar.eq.-1.and.Jp.eq.1) then
+!         write(5) i1
+!         write(5) TDA_matrix
+!        endif
 
 !        if(.not.(if_ort.eq.1.and.(ipar.eq.-1.and.Jp.eq.1))) then
 
@@ -388,8 +291,6 @@
 
         enddo
        enddo
-
-!       deallocate(VNNtz,levtz)
 
        close(1)
        close(2)

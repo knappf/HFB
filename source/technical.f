@@ -9,7 +9,7 @@
      &            Ap_HFB, Bp_HFB, An_HFB, Bn_HFB,
      &            rhop_HFB, rhon_HFB, kapp_HFB, kapn_HFB,
      &            Vpp,Vnn,Vpn,Fpp,Fnn,Fpn,tran_p,tran_n,tran_Y,
-     &            VpY,VnY,V3B,VNNtz,FNNtz,VNLtz,
+     &            VpY,VnY,V3B,
      &            trE0_p,trE0_n,trE1_p,trE1_n,trE2_p,trE2_n,
      &            trE3_p,trE3_n,trEN_p,trEN_n,trS1_p,trS1_n,
      &            trM1s_p,trM1s_n,trM1l_p,trM1l_n,
@@ -19,7 +19,7 @@
      &            rad_den1,H11p,H11n,zcross,weight,
      &            lnl, lev3, lpoint, 
      &            lev1pn,lp1,lp2,cg3,larrow1,larrow2,larrowm,iphase,
-     &            lev1pnm,levtz
+     &            lev1pnm,levtz,sixj1
 
         DOUBLE PRECISION, ALLOCATABLE, SAVE :: kin_p(:,:), kin_n(:,:)
         DOUBLE PRECISION, ALLOCATABLE, SAVE :: kin_Y(:,:)
@@ -62,10 +62,6 @@
         DOUBLE PRECISION, ALLOCATABLE, SAVE :: VpY(:,:,:,:,:)
         DOUBLE PRECISION, ALLOCATABLE, SAVE :: VnY(:,:,:,:,:)
 
-        DOUBLE PRECISION, ALLOCATABLE, SAVE :: VNNtz(:,:,:,:,:)
-        DOUBLE PRECISION, ALLOCATABLE, SAVE :: FNNtz(:,:,:,:,:)
-        DOUBLE PRECISION, ALLOCATABLE, SAVE :: VNLtz(:,:,:,:,:)
-
         DOUBLE PRECISION, ALLOCATABLE, SAVE :: V3B(:,:)
 
         DOUBLE PRECISION, ALLOCATABLE, SAVE :: Fpp(:,:,:,:)
@@ -102,6 +98,7 @@
         double precision, allocatable, save :: zcross(:),weight(:)
 
         double precision, allocatable, save :: cg3(:,:,:,:,:)
+        double precision, allocatable, save :: sixj1(:,:,:,:,:,:)
 
         type(elem_type) :: larrow1,larrow2,larrowm
         INTEGER :: iphase

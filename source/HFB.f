@@ -1,4 +1,3 @@
-      ! test Git
       program Phonon_EDF
 
        USE technical

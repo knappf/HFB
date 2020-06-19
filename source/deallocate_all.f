@@ -7,7 +7,6 @@
        deallocate(kin_p,kin_n,kin_Y)
        deallocate(Vpp,Vnn,Vpn)
        deallocate(VpY,VnY)
-       deallocate(FNNtz,VNLtz)
        deallocate(V3B)
        deallocate(Up_HFB,Un_HFB,Vp_HFB,Vn_HFB)
        deallocate(Ap_HFB,An_HFB,Bp_HFB,Bn_HFB)

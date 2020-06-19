@@ -12,7 +12,7 @@
 !       type(phonon_type), allocatable, save :: list_phon(:)
        double precision, allocatable, save :: TDA_matrix(:,:),w(:)
        double precision, allocatable, save :: spur_CM(:),spur_N(:)
-       double precision, allocatable, save :: sixj1(:,:,:,:,:,:)
+!       double precision, allocatable, save :: sixj1(:,:,:,:,:,:)
        integer :: p1,h1,tz1,p2,h2,tz2
 
        allocate(Fpp(id,id,id,id))
