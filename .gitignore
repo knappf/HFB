@@ -1,6 +1,5 @@
 vlk.dat
-3belem.out
-VNL.out
+*.out
 *.mod
 *.o
 HF_run
